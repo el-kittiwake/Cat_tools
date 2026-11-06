@@ -88,7 +88,7 @@ function handleWrite(e) {
 
   } catch (err) {
     // Catches anything not caught above. Such as quotas, API updates, etc.
-    // Without this, unhandled failures would end up recieved by the app as
+    // Without this, unhandled failures would end up received by the app as
     // generic errors rather than a string it can detect and show to the user.
     return errorResponse(err.message);
   }
@@ -122,16 +122,16 @@ function handleRead(e) {
     const startRow = Math.max(2, lastRow - n + 1);
     const numRows = lastRow - startRow + 1;
 
-    // Cols B:E only — time, tag, message, note — skips column A (date).
-    // row[0]=time, row[1]=tag, row[2]=message, row[3]=note.
+    // Cols A:E - date, time, tag, message, note.
+    // row[0]=date, row[1]=time, row[2]]=tag, row[3]=message, row[4]=note.
     // getDisplayValues() returns the string as shown in the cell.
     // getValues() returns the value stores under the covers.
-    const rows = sheet.getRange(startRow, 2, numRows, 4).getDisplayValues();
+    const rows = sheet.getRange(startRow, 1, numRows, 5).getDisplayValues();
 
     // getDisplayValues() returns oldest-first (sheet order); reverse for
     // newest-first display in the app.
     const result = rows.reverse().map(function (row) {
-      return { time: row[0], tag: row[1], message: row[2], note: row[3] };
+      return { date: row[0], time: row[1], tag: row[2], message: row[3], note: row[4] };
     });
 
     return ContentService
