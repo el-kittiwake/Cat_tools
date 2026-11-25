@@ -31,6 +31,28 @@ def positive_int(text):
 def fail(msg):
     sys.exit(f"cat*log error: {msg}")
 
+## Function to load KEY=value pairs from a .env file beside this script
+# Only fills gaps (setdefault), so real environment variables always win.
+# utf-8-sig drops the BOM that Windows editors can add.
+# strip("export ") would strip a character set, so removeprefix is used.
+def load_env():
+    scriptDir = os.path.dirname(os.path.realpath(__file__))
+    path = os.path.join(scriptDir, ".env")
+    if not os.path.exists(path):
+        return
+    with open(path, mode='r', encoding="utf-8-sig") as file:
+        for line in file:
+            stripped = line.strip()
+            if stripped.startswith("#"):
+                continue
+            if stripped.startswith("export "):
+                stripped = stripped.removeprefix("export ")
+            key, sep, value = stripped.partition("=")
+            key = key.strip()
+            value = value.strip().strip("\"'")
+            if sep:
+                os.environ.setdefault(key, value)
+
 ## Function to fetch URL and handle errors and problems
 # https://docs.python.org/3/howto/urllib2.html
 # https://www.geeksforgeeks.org/python/handling-oserror-exception-in-python/
@@ -128,9 +150,10 @@ if __name__ == "__main__":
     args = build_parser()
 
     ## Read environment variables
-    # Exit if not found
+    # .env fills gaps only; real environment variables win. Exit if not found
+    load_env()
     env_url = os.getenv('CATLOG_URL')
     if not env_url:
-        fail("CATLOG_URL not set")
+        fail("CATLOG_URL not set (checked the environment and .env next to catlog.py)")
 
     args.func(env_url, args)
