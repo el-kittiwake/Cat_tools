@@ -48,7 +48,7 @@ All requests are GET. The script tells them apart by which parameter is present.
 
 Values must be URL-encoded. The date and time are added by the script. Each write appends one row in the order `date, time, tag, message, note`.
 
-Response: `OK`.
+Reply: `OK`.
 
 ### Read
 
@@ -56,7 +56,7 @@ Response: `OK`.
 ?read=1[&rows=<n>]
 ```
 
-Response: a JSON array, newest first, with one object per row:
+Reply: a JSON array, newest first, with one object per row:
 
 ```json
 [
@@ -70,7 +70,16 @@ Response: a JSON array, newest first, with one object per row:
 ]
 ```
 
-An empty sheet gives `[]`.
+An empty sheet gives `[]`. Row 1 is always treated as the header and is never returned.
+
+`rows` is how many of the newest rows to return:
+
+* Missing or not a number: 3.
+* Decimals are truncated (2.7 gives 2).
+* There is no upper limit. A large enough number will return the whole sheet.
+* `0` or a negative number returns an `ERROR:` containing the Sheets API's own message, rather than an empty list.
+
+The CLI refuses anything below 1 before sending, and the app always asks for 10, so this only matters if you edit a URL by hand.
 
 ### Errors
 
@@ -78,7 +87,10 @@ The Apps Script has an error catching function that returns the error as plain t
 
 ```text
 ERROR: missing 'message' or 'read' parameter
+ERROR: sheet 'Vappu' not found
 ```
+
+Any other failure, such as a quota limit or an invalid range, is passed through as `ERROR:` followed by Google's own message.
 
 ## Things that ~~did~~ can trip me up
 

@@ -70,6 +70,7 @@ Pick a tag, add a message, add a note if desired, and press **Add log**. The tag
 | `Possible failure`              | Bad response, or an error from the script |
 | `Possible failure: timed out` | No answer within 10 seconds. Check the sheet before retrying. |
 | `Failed: connection problem`       | Couldn't reach the script |
+| `Ready`                            | Shown at start up |
 | `URL saved`, `Enter message first` | Self-explanatory |
 
 Saying "possible" is a deliberate design choice. The app can't be certain, and a timeout doesn't mean the row wasn't written.
@@ -130,6 +131,7 @@ Between chart points the app interpolates linearly. It never extrapolates: a wei
             "points": [[2, 30], [3, 40]]
         }
     ]
+}
 ```
 
 | Field       | Meaning |

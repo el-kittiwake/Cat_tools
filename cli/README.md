@@ -104,14 +104,13 @@ Failures print one line to stderr and exit with status 1. They start with `cat*l
 | Message | Meaning |
 |---------|---------|
 | `CATLOG_URL not set (checked the environment and .env next to catlog.py)` | An `/exec` URL was not found. Check `.env` is in the same directory as the script (and isn't called `.env.txt` on Windows) |
-| `CATLOG_URL is not a valid URL.` | The environment variable doesn't contain a usable `/exec` URL    |
 | `HTTP: <code>`      | The request to Google failed |
 | `network: <reason>` | Tool couldn't reach the script (offline etc.) |
 | `system: <detail>`  | Operating system error |
 | `unexpected response: <text>` | The script answered with something the tool didn't understand |
 | `ERROR: ...`        | The script reported a problem. It keeps its own prefix, so it reads `cat*log error: ERROR: ...` |
 
-Mistakes in the formatting of the command itself are reported by `argparse`, with a usage line.
+Mistakes in the command itself are reported by `argparse`, with a usage line.
 
 ## Known quirks
 
