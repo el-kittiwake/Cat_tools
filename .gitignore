@@ -1,3 +1,7 @@
 .env
 .vscode
-
+old/
+junk/
+internal*
+/catlog.py
+*.apk
